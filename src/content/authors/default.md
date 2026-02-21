@@ -1,10 +1,10 @@
 ---
 name: "砚昇"
 avatar: "../../assets/yansheng_avatar.png"
+shortBio: "24级27届高中生，热爱折腾技术与建站。"
+email: "yansheng773@gmail.com"
 github: "https://github.com/hongquangphung7044-oss"
 ---
-
-📧 **联系邮箱**：[yansheng773@gmail.com](mailto:yansheng773@gmail.com)
 
 我是砚昇，24级27届高中生。平时喜欢折腾技术、研究 Android 开发、搞搞网络工具和建站。
 
