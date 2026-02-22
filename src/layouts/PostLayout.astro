@@ -9,14 +9,18 @@ import { POST_METADATA } from "../consts";
 import PostCover from "../components/PostCover.astro";
 import ScrollTopAndComments from "../components/ScrollTopAndComments.astro";
 import Comments from "../components/Comments.astro";
+import Link from "../components/Link.astro";
+import { t } from "../i18n/utils";
 
 interface Props {
   post: CollectionEntry<"blog">;
 }
 
 const { post } = Astro.props;
-const authors = await getEntries(post.data.authors);
-const { Content } = await render(post);
+
+const authors: CollectionEntry<"authors">[] = await getEntries(
+  post.data.authors
+);
 
 const articleOgDetails = {
   publishedTime: post.data.date,
@@ -24,17 +28,22 @@ const articleOgDetails = {
   authors: authors.map(({ data }) => data.name),
   cover: post.data.cover,
 };
+
+const { Content } = await render(post);
 ---
 
-<RootLayout title={post.data.title} description={post.data.summary} article={articleOgDetails}>
+<RootLayout
+  title={post.data.title}
+  description={post.data.summary}
+  article={articleOgDetails}
+>
   <SectionContainer>
     <ScrollTopAndComments client:only="solid-js" />
-    
     <article>
       <div class="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
         <header class="pt-6 xl:pb-6">
           <div class="space-y-1 text-center pb-4">
-            <dl>
+            <dl class="space-y-10">
               <div>
                 <dt class="sr-only">发布日期</dt>
                 <dd class="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
@@ -44,37 +53,51 @@ const articleOgDetails = {
             </dl>
             <PageTitle>{post.data.title}</PageTitle>
           </div>
-          {post.data.cover && POST_METADATA.showCover && (
-            <div class="space-y-1 pb-10 text-center">
-              <PostCover {post} />
-            </div>
-          )}
-          </header>
-        
+          {
+            post.data.cover && POST_METADATA.showCover && (
+              <div class="space-y-1 pb-10 text-center dark:border-gray-700">
+                <PostCover {post} />
+              </div>
+            )
+          }
+          { /* 摘要 (Summary) 已移除 */ }
+        </header>
         <div class="grid-rows-[auto_1fr] divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6">
           <dl class="pb-10 pt-6 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700">
             <dt class="sr-only">作者</dt>
             <dd>
-              <ul class="flex justify-center items-center gap-4 xl:block xl:space-y-8">
-                {authors.map((author) => (
-                  <li class="flex items-center space-x-2">
-                    {author.data.avatar && (
-                      <Image src={author.data.avatar} width={38} height={38} alt="avatar" class="h-10 w-10 rounded-full" />
-                    )}
-                    <dl class="whitespace-nowrap text-sm font-medium">
-                      <dd class="text-gray-900 dark:text-gray-100">{author.data.name}</dd>
+              <ul class="flex flex-wrap justify-center items-center gap-4 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8">
+                {
+                  authors.map(({ data }) => (
+                    <li class="flex items-center space-x-2">
+                      {data.avatar && (
+                        <Image
+                          src={data.avatar}
+                          width={38}
+                          height={38}
+                          alt="avatar"
+                          class="h-10 w-10 rounded-full"
+                        />
+                      )}
+                      <dl class="whitespace-nowrap text-sm font-medium leading-5">
+                        <dt class="sr-only">姓名</dt>
+                        <dd class="text-gray-900 dark:text-gray-100">
+                          {data.name}
+                        </dd>
+                        { /* 推特链接 (Twitter) 已移除 */ }
                       </dl>
-                  </li>
-                ))}
+                    </li>
+                  ))
+                }
               </ul>
             </dd>
           </dl>
-          
           <div class="xl:col-span-3 xl:row-span-2 xl:pb-0">
             <div class="prose max-w-none pb-8 pt-10 dark:prose-invert">
-               <Content />
+              <Content />
             </div>
             
+            { /* 功能保留：底部评论区 */ }
             <div class="pb-6 pt-6 text-center text-gray-700 dark:text-gray-300" id="comment">
               <Comments {post} />
             </div>
