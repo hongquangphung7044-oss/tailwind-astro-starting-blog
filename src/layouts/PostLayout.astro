@@ -8,7 +8,6 @@ import FormattedDate from "@/components/FormattedDate.astro";
 import { POST_METADATA } from "@/consts";
 import PostCover from "@/components/PostCover.astro";
 import ScrollTopAndComments from "@/components/ScrollTopAndComments.astro";
-import { t } from "@/i18n/utils";
 
 interface Props {
   post: CollectionEntry<"blog">;
@@ -35,7 +34,7 @@ const articleOgDetails = {
           <div class="space-y-1 text-center pb-4">
             <dl>
               <div>
-                <dt class="sr-only">{t('layouts.postLayout.publishedAt')}</dt>
+                <dt class="sr-only">发布日期</dt>
                 <dd class="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                   <FormattedDate date={post.data.date} />
                 </dd>
@@ -52,7 +51,7 @@ const articleOgDetails = {
         
         <div class="grid-rows-[auto_1fr] divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6">
           <dl class="pb-10 pt-6 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700">
-            <dt class="sr-only">{t('layouts.postLayout.authors')}</dt>
+            <dt class="sr-only">作者</dt>
             <dd>
               <ul class="flex justify-center items-center gap-4 xl:block xl:space-y-8">
                 {authors.map((author) => (
