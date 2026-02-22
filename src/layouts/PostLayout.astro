@@ -1,13 +1,12 @@
 ---
 import { type CollectionEntry, getEntries, render } from "astro:content";
 import { Image } from "astro:assets";
-import RootLayout from "@/layouts/RootLayout.astro";
-import SectionContainer from "@/components/SectionContainer.astro";
-import PageTitle from "@/components/PageTitle.astro";
-import FormattedDate from "@/components/FormattedDate.astro";
-import { POST_METADATA } from "@/consts";
-import PostCover from "@/components/PostCover.astro";
-import ScrollTopAndComments from "@/components/ScrollTopAndComments.astro";
+import RootLayout from "../layouts/RootLayout.astro";
+import SectionContainer from "../components/SectionContainer.astro";
+import PageTitle from "../components/PageTitle.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import { POST_METADATA } from "../consts";
+import PostCover from "../components/PostCover.astro";
 
 interface Props {
   post: CollectionEntry<"blog">;
@@ -27,7 +26,6 @@ const articleOgDetails = {
 
 <RootLayout title={post.data.title} description={post.data.summary} article={articleOgDetails}>
   <SectionContainer>
-    <ScrollTopAndComments client:only="solid-js" />
     <article>
       <div class="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
         <header class="pt-6 xl:pb-6">
