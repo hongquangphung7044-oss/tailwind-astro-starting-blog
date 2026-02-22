@@ -4,9 +4,11 @@ import RootLayout from "../layouts/RootLayout.astro";
 import Link from "../components/Link.astro";
 import Tag from "../components/Tag.astro";
 import FormattedDate from "../components/FormattedDate.astro";
-import { SITE_METADATA, MAX_DISPLAY } from "../consts";
+import { SITE_METADATA } from "../consts";
 import { sortBlogPosts, excludeDrafts } from "../functions";
 
+// 我们直接在这里自己定义，不找外部文件要了！
+const MAX_DISPLAY = 5; 
 const posts = await getCollection("blog", excludeDrafts).then(sortBlogPosts);
 ---
 
