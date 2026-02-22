@@ -1,11 +1,11 @@
 ---
 import { getCollection } from "astro:content";
-import SiteMetadata from "@/components/SiteMetadata.astro";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import ListPostCover from "@/components/ListPostCover.astro";
-import Link from "@/components/Link.astro";
-import { SITE_METADATA, MAX_DISPLAY } from "@/consts";
-import { sortBlogPosts, excludeDrafts } from "@/functions";
+import SiteMetadata from "../components/SiteMetadata.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ListPostCover from "../components/ListPostCover.astro";
+import Link from "../components/Link.astro";
+import { SITE_METADATA, MAX_DISPLAY } from "../consts";
+import { sortBlogPosts, excludeDrafts } from "../functions";
 
 const posts = await getCollection("blog", excludeDrafts).then(sortBlogPosts);
 ---
