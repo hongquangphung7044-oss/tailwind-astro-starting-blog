@@ -75,10 +75,10 @@ export const ITEMS_PER_PAGE = 5;
  You should add translations for these in src/i18n/ui.ts or use as is.
  */
 export const NAVIGATION = [
-  { href: "/", title: "nav.home" },
-  { href: "/blog", title: "nav.blog" },
-  { href: "/tags", title: "nav.tags" },
-  { href: "/about", title: "nav.about" },
+  { href: "/", title: "首页" },
+  { href: "/blog", title: "博客" },
+  { href: "/tags", title: "标签" },
+  { href: "/about", title: "关于" },
 ] as const;
 
 export const POST_METADATA = {
