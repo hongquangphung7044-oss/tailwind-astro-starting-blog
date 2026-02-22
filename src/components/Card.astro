@@ -10,9 +10,10 @@ interface Props {
   description: string;
   imgSrc?: string;
   href?: string;
+  sticky?: boolean;
 }
 
-const { title, description, imgSrc, href } = Astro.props;
+const { title, description, imgSrc, href, sticky } = Astro.props;
 ---
 
 <div class="md max-w-[544px] p-4 md:w-1/2">
@@ -46,10 +47,14 @@ const { title, description, imgSrc, href } = Astro.props;
         {
           href ? (
             <Link href={href} aria-label={t('components.card.linkToPost', {title})}>
+              {sticky && <span class="text-yellow-500 mr-2" title="置顶文章">📌</span>}
               {title}
             </Link>
           ) : (
-            title
+            <>
+              {sticky && <span class="text-yellow-500 mr-2" title="置顶文章">📌</span>}
+              {title}
+            </>
           )
         }
       </h2>

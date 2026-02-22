@@ -29,6 +29,7 @@ const blog = defineCollection({
       lastmod: z.coerce.date().optional(),
       draft: z.boolean().default(false),
       summary: z.string(),
+      sticky: z.boolean().optional(),
       images: z.string().optional(),
       authors: z.array(reference("authors")).default(["default"]),
       postLayout: z

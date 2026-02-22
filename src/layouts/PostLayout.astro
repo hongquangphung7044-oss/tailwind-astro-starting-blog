@@ -44,7 +44,7 @@ const articleOgDetails = {
                 </dd>
               </div>
             </dl>
-            <PageTitle>{post.data.title}</PageTitle>
+            <PageTitle>{post.data.sticky && <span style="color: #fbbf24; margin-right: 8px;">📌 [置顶]</span>}{post.data.title}</PageTitle>
           </div>
           {post.data.cover && POST_METADATA.showCover && (
             <div class="space-y-1 pb-10 text-center">
