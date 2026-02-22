@@ -5,7 +5,7 @@ import Tag from "./Tag.astro";
 import Link from "./Link.astro";
 
 const { post, class: className } = Astro.props;
-const { title, date, tags, summary, cover, sticky } = post.data; // <--- 提取 sticky
+const { title, date, tags, summary, cover, sticky } = post.data;
 ---
 
 <article class={className}>
@@ -21,12 +21,12 @@ const { title, date, tags, summary, cover, sticky } = post.data; // <--- 提取 
         <div>
           <h2 class="text-2xl font-bold leading-8 tracking-tight">
             <Link href={`/blog/${post.id}`} class="text-gray-900 dark:text-gray-100">
-              {sticky && <span class="text-yellow-500 mr-2" title="置顶文章">📌</span>}
+              {sticky && <span class="text-yellow-500 mr-2" title="置顶">📌</span>}
               {title}
             </Link>
           </h2>
-          <div class="flex flex-wrap">
-            {tags.map((tag) => <Tag id={tag} />)}
+          <div class="flex flex-wrap mt-2 mb-2">
+            {tags && tags.map((tag) => <Tag id={tag} />)}
           </div>
         </div>
         <div class="flex flex-col lg:flex-row">
