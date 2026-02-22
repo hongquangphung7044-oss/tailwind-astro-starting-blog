@@ -58,7 +58,7 @@ const { Content, headings } = await render(post);
               <FormattedDate date={post.data.date} />
             </dd>
           </dl>
-          <PageTitle>{post.data.sticky && <span style="color: #fbbf24; margin-right: 8px;">📌 [置顶]</span>}{post.data.title}</PageTitle>
+          <PageTitle>{post.data.sticky && <span style="color: #fbbf24; margin-right: 8px;">📌</span>}{post.data.title}</PageTitle>
         </div>
         {
           post.data.cover && POST_METADATA.showCover && (
