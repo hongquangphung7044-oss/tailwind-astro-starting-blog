@@ -1,127 +1,86 @@
 ---
+// 使用最原始的相对路径，绕过 Cloudflare 别名解析 Bug
 import { type CollectionEntry, getEntries, render } from "astro:content";
 import { Image } from "astro:assets";
-import RootLayout from "@/layouts/RootLayout.astro";
-import SectionContainer from "@/components/SectionContainer.astro";
-import PageTitle from "@/components/PageTitle.astro";
-import FormattedDate from "@/components/FormattedDate.astro";
-import { POST_METADATA } from "@/consts";
-import PostCover from "@/components/PostCover.astro";
-import ScrollTopAndComments from "@/components/ScrollTopAndComments.astro";
-import Comments from "@/components/Comments.astro";
-import { t } from "@/i18n/utils";
+import RootLayout from "../layouts/RootLayout.astro";
+import SectionContainer from "../components/SectionContainer.astro";
+import PageTitle from "../components/PageTitle.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import { POST_METADATA } from "../consts";
+import PostCover from "../components/PostCover.astro";
+import ScrollTopAndComments from "../components/ScrollTopAndComments.astro";
+import Comments from "../components/Comments.astro";
 
 interface Props {
   post: CollectionEntry<"blog">;
 }
 
 const { post } = Astro.props;
-
-const authors: CollectionEntry<"authors">[] = await getEntries(
-  post.data.authors
-);
+const authors = await getEntries(post.data.authors);
+const { Content } = await render(post);
 
 const articleOgDetails = {
   publishedTime: post.data.date,
   modifiedTime: post.data.lastmod,
   authors: authors.map(({ data }) => data.name),
-  authorTwitter: authors.map(({ data }) => data.twitter).at(0),
   cover: post.data.cover,
 };
-
-const { Content } = await render(post);
 ---
 
-<RootLayout
-  title={post.data.title}
-  description={post.data.summary}
-  article={articleOgDetails}
->
+<RootLayout title={post.data.title} description={post.data.summary} article={articleOgDetails}>
   <SectionContainer>
-    { /* 功能找回：回到顶部/点赞按钮 (去掉了报错的 client 指令) */ }
+    {/* 功能找回：回到顶部和跳转评论，去掉 client 指令防止编译报错 */}
     <ScrollTopAndComments />
     
     <article>
       <div class="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
         <header class="pt-6 xl:pb-6">
           <div class="space-y-1 text-center pb-4">
-            <dl class="space-y-10">
+            <dl>
               <div>
-                <dt class="sr-only">{t('layouts.postLayout.publishedAt')}</dt>
-                <dd
-                  class="text-base font-medium leading-6 text-gray-500 dark:text-gray-400"
-                >
+                <dt class="sr-only">发布日期</dt>
+                <dd class="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                   <FormattedDate date={post.data.date} />
                 </dd>
               </div>
             </dl>
             <PageTitle>{post.data.title}</PageTitle>
           </div>
-          {
-            post.data.cover && POST_METADATA.showCover && (
-              <div class="space-y-1 pb-10 text-center dark:border-gray-700">
-                <PostCover {post} />
-              </div>
-            )
-          }
-          { /* 摘要 (Summary) 已物理移除 */ }
+          {post.data.cover && POST_METADATA.showCover && (
+            <div class="space-y-1 pb-10 text-center">
+              <PostCover {post} />
+            </div>
+          )}
+          {/* 这里原本是摘要，现在已经物理删除了 */}
         </header>
-        <div
-          class="grid-rows-[auto_1fr] divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6"
-        >
-          <dl
-            class="pb-10 pt-6 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700"
-          >
-            <dt class="sr-only">{t('layouts.postLayout.authors')}</dt>
+        
+        <div class="grid-rows-[auto_1fr] divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6">
+          <dl class="pb-10 pt-6 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700">
+            <dt class="sr-only">作者</dt>
             <dd>
-              <ul
-                class="flex flex-wrap justify-center items-center gap-4 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8"
-              >
-                {
-                  authors.map(({ data }) => (
-                    <li class="flex items-center space-x-2">
-                      {data.avatar && (
-                        <Image
-                          src={data.avatar}
-                          width={38}
-                          height={38}
-                          alt="avatar"
-                          class="h-10 w-10 rounded-full"
-                        />
-                      )}
-                      <dl class="whitespace-nowrap text-sm font-medium leading-5">
-                        <dt class="sr-only">{t('layouts.postLayout.authorName')}</dt>
-                        <dd class="text-gray-900 dark:text-gray-100">
-                          {data.name}
-                        </dd>
-                        { /* 推特链接已移除 */ }
-                      </dl>
-                    </li>
-                  ))
-                }
+              <ul class="flex justify-center items-center gap-4 xl:block xl:space-y-8">
+                {authors.map((author) => (
+                  <li class="flex items-center space-x-2">
+                    {author.data.avatar && (
+                      <Image src={author.data.avatar} width={38} height={38} alt="avatar" class="h-10 w-10 rounded-full" />
+                    )}
+                    <dl class="whitespace-nowrap text-sm font-medium">
+                      <dd class="text-gray-900 dark:text-gray-100">{author.data.name}</dd>
+                      {/* 这里原本是推特链接，现在已经物理删除了 */}
+                    </dl>
+                  </li>
+                ))}
               </ul>
             </dd>
           </dl>
+          
           <div class="xl:col-span-3 xl:row-span-2 xl:pb-0">
-            {
-              post.data.draft && (
-                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 dark:bg-yellow-500 dark:border-yellow-300 mt-10">
-                  <p class="leading-5 text-yellow-700 dark:text-yellow-300">
-                    {t('layouts.postLayout.draftMessage')}
-                  </p>
-                </div>
-              )
-            }
             <div class="prose max-w-none pb-8 pt-10 dark:prose-invert">
-              <Content />
+               <Content />
             </div>
             
-            { /* 分享按钮已物理移除 */ }
-
-            <div
-              class="pb-6 pt-6 text-center text-gray-700 dark:text-gray-300"
-              id="comment"
-            >
+            {/* 功能找回：文章底部的评论区 */}
+            <div class="pb-6 pt-6 text-center text-gray-700 dark:text-gray-300" id="comment">
               <Comments {post} />
             </div>
           </div>
