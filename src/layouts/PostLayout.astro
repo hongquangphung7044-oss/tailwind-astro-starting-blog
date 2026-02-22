@@ -10,7 +10,6 @@ import Tag from "../components/Tag.astro";
 import ScrollTopAndComments from "@/components/solidjs/ScrollTopAndComments.tsx";
 import PostCover from "../components/PostCover.astro";
 import DetailsSummary from "../components/DetailsSummary.astro";
-import SocialShareButtons from "../components/social-icons/SocialShareButtons.astro";
 import Comments from "../components/Comments.astro";
 import { POST_METADATA, SITE_METADATA } from "@/consts";
 import { useTranslations } from "@/i18n";
@@ -149,7 +148,6 @@ const { Content, headings } = await render(post);
             }
             {
               ['top', 'both'].includes(POST_METADATA.showShareButtons) ? (
-                {/* <SocialShareButtons title={post.data.title} description={post.data.summary} class="mt-4" />
               ) : null
             }
             {
@@ -185,7 +183,6 @@ const { Content, headings } = await render(post);
             </div>
             {
               ['bottom', 'both'].includes(POST_METADATA.showShareButtons) ? (
-                {/* <SocialShareButtons title={post.data.title} description={post.data.summary} />
               ) : null
             }
             {
