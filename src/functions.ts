@@ -13,7 +13,17 @@ import type {CollectionEntry} from "astro:content";
 export const sortBlogPosts = (posts: CollectionEntry<'blog'>[] | null): CollectionEntry<'blog'>[] => {
     if (!posts) return [];
     return posts.sort((a, b) => {
-        return new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+        // 1. 先判断置顶状态 (true 转化为 1，没置顶或 false 转化为 0)
+        const aSticky = a.data.sticky ? 1 : 0;
+        const bSticky = b.data.sticky ? 1 : 0;
+        
+        // 如果置顶状态不同，置顶的排前面
+        if (aSticky !== bSticky) {
+            return bSticky - aSticky;
+        }
+        
+        // 2. 如果置顶状态一样（都置顶，或者都没置顶），按时间倒序排列
+        return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
     })
 }
 
