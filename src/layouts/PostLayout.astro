@@ -30,7 +30,7 @@ const articleOgDetails = {
 <RootLayout title={post.data.title} description={post.data.summary} article={articleOgDetails}>
   <SectionContainer>
     {/* 核心改动2：添加 client:load 指令，让 SolidJS 组件在客户端激活 */}
-    <ScrollTopAndComments client:load />
+    <ScrollTopAndComments client:only="solid-js" />
     
     <article>
       <div class="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">

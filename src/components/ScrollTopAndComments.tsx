@@ -1,7 +1,11 @@
 import { createSignal, onMount, onCleanup } from 'solid-js';
+import { isServer } from 'solid-js/web';
 
 const ScrollTopAndComments = () => {
   const [show, setShow] = createSignal(false);
+
+  // 安全检查：如果是服务器环境，直接返回空内容
+  if (isServer) return null;
 
   const handleScroll = () => {
     if (window.scrollY > 50) setShow(true);
