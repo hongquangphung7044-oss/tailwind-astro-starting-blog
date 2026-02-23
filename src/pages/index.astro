@@ -2,14 +2,13 @@
 import { getCollection } from "astro:content";
 import RootLayout from "../layouts/RootLayout.astro";
 import Link from "../components/Link.astro";
-import FormattedDate from "../components/FormattedDate.astro";
-import Tag from "../components/Tag.astro";
+import ListPost from "../components/ListPost.astro";
 import { sortBlogPosts, excludeDrafts } from "../functions";
 
 const MAX_DISPLAY = 5;
 const posts = await getCollection("blog", excludeDrafts).then(sortBlogPosts);
 
-// --- 🛡️ 安全区：直接定义元数据 ---
+// --- 🛡️ 安全区 ---
 const SAFE_TITLE = "砚昇的博客";
 const SAFE_DESCRIPTION = "分享生活与技术的互联网角落";
 ---
@@ -27,56 +26,9 @@ const SAFE_DESCRIPTION = "分享生活与技术的互联网角落";
     <ul class="divide-y divide-gray-200 dark:divide-gray-700">
       {!posts.length && '暂无文章。'}
       {
-        posts.slice(0, MAX_DISPLAY).map((post) => {
-          const { date, title, summary, tags, sticky } = post.data;
-          
-          // 🔥 核心修复：如果没有 slug，就用 id！
-          // 这样不管你是用脚本发的，还是手写的，标题链接永远是对的！
-          const postLink = `/blog/${post.slug || post.id}`;
-          
-          return (
-            <li class="py-12">
-              <article>
-                <div class="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                  <dl>
-                    <dt class="sr-only">Published on</dt>
-                    <dd class="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                      <FormattedDate date={date} />
-                    </dd>
-                  </dl>
-                  <div class="space-y-5 xl:col-span-3">
-                    <div class="space-y-6">
-                      <div>
-                        <h2 class="text-2xl font-bold leading-8 tracking-tight">
-                          <Link href={postLink} class="text-gray-900 dark:text-gray-100">
-                            {/* 🔥 置顶图标 */}
-                            {sticky && <span class="text-yellow-500 mr-2" title="置顶">📌</span>}
-                            {title}
-                          </Link>
-                        </h2>
-                        <div class="flex flex-wrap mt-2 mb-2">
-                          {tags && tags.map((tag) => <Tag text={tag.id || tag} id={tag.id || tag} />)}
-                        </div>
-                      </div>
-                      <div class="prose max-w-none text-gray-500 dark:text-gray-400">
-                        {summary}
-                      </div>
-                    </div>
-                    <div class="text-base font-medium leading-6">
-                      <Link
-                        href={postLink}
-                        class="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                        aria-label={`Read more: "${title}"`}
-                      >
-                        Read more &rarr;
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            </li>
-          )
-        })
+        posts.slice(0, MAX_DISPLAY).map((post) => (
+          <ListPost post={post} />
+        ))
       }
     </ul>
   </div>
