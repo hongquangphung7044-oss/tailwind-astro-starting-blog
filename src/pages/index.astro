@@ -1,6 +1,5 @@
 ---
 import { getCollection } from "astro:content";
-import { SITE_METADATA } from '../consts';
 import RootLayout from "../layouts/RootLayout.astro";
 import Link from "../components/Link.astro";
 import FormattedDate from "../components/FormattedDate.astro";
@@ -9,16 +8,20 @@ import { sortBlogPosts, excludeDrafts } from "../functions";
 
 const MAX_DISPLAY = 5;
 const posts = await getCollection("blog", excludeDrafts).then(sortBlogPosts);
+
+// --- 🛡️ 安全区：直接定义元数据，防止读取外部文件报错 ---
+const SAFE_TITLE = "砚昇的博客";
+const SAFE_DESCRIPTION = "分享生活与技术的互联网角落";
 ---
 
-<RootLayout title={SITE_METADATA.title} description={SITE_METADATA.description}>
+<RootLayout title={SAFE_TITLE} description={SAFE_DESCRIPTION}>
   <div class="divide-y divide-gray-200 dark:divide-gray-700">
     <div class="space-y-2 pb-8 pt-6 md:space-y-5">
       <h1 class="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
         最新文章
       </h1>
       <p class="text-lg leading-7 text-gray-500 dark:text-gray-400">
-        {SITE_METADATA.description}
+        {SAFE_DESCRIPTION}
       </p>
     </div>
     <ul class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -26,6 +29,7 @@ const posts = await getCollection("blog", excludeDrafts).then(sortBlogPosts);
       {
         posts.slice(0, MAX_DISPLAY).map((post) => {
           const { date, title, summary, tags, sticky } = post.data;
+          // 兼容 slug 和 id
           const postLink = post.slug ? `/blog/${post.slug}` : `/blog/${post.id}`;
           
           return (
@@ -43,7 +47,7 @@ const posts = await getCollection("blog", excludeDrafts).then(sortBlogPosts);
                       <div>
                         <h2 class="text-2xl font-bold leading-8 tracking-tight">
                           <Link href={postLink} class="text-gray-900 dark:text-gray-100">
-                            {/* 🔥 重点在这里：如果文章置顶，就在标题前加图钉 */}
+                            {/* 🔥 置顶图标：在这里！ */}
                             {sticky && <span class="text-yellow-500 mr-2" title="置顶">📌</span>}
                             {title}
                           </Link>
