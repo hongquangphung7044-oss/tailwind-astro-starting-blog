@@ -30,6 +30,7 @@ const SAFE_DESCRIPTION = "分享生活与技术的互联网角落";
       {
         posts.slice(0, MAX_DISPLAY).map((post) => {
           const { date, title, summary, tags, sticky, cover } = post.data;
+          // 链接双保险
           const postLink = post.slug ? `/blog/${post.slug}` : `/blog/${post.id}`;
           
           return (
@@ -52,14 +53,20 @@ const SAFE_DESCRIPTION = "分享生活与技术的互联网角落";
                           </Link>
                         </h2>
                         
-                        {/* 🔥 修复点：标签放回这里！就在标题下面！ */}
+                        {/* 🔥 标签终极修复：同时传入三个参数，总有一个是对的！ */}
                         <div class="flex flex-wrap mt-2 mb-4">
-                          {tags && tags.map((tag) => <Tag text={tag.id || tag} id={tag.id || tag} />)}
+                          {tags && tags.map((tag) => {
+                             // 处理 tag 是对象还是字符串的情况
+                             const tagName = tag.id || tag; 
+                             return (
+                               <Tag text={tagName} id={tagName} name={tagName} />
+                             )
+                          })}
                         </div>
                         
                       </div>
                       
-                      {/* 封面图片区域 */}
+                      {/* 封面图片 */}
                       <div class="flex flex-col lg:flex-row gap-6">
                         {cover && (
                             <div class="flex-shrink-0">
