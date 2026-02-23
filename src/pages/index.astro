@@ -4,7 +4,6 @@ import { Image } from "astro:assets";
 import RootLayout from "../layouts/RootLayout.astro";
 import Link from "../components/Link.astro";
 import FormattedDate from "../components/FormattedDate.astro";
-import Tag from "../components/Tag.astro";
 import { sortBlogPosts, excludeDrafts } from "../functions";
 
 const MAX_DISPLAY = 5;
@@ -30,7 +29,6 @@ const SAFE_DESCRIPTION = "分享生活与技术的互联网角落";
       {
         posts.slice(0, MAX_DISPLAY).map((post) => {
           const { date, title, summary, tags, sticky, cover } = post.data;
-          // 链接双保险
           const postLink = post.slug ? `/blog/${post.slug}` : `/blog/${post.id}`;
           
           return (
@@ -53,13 +51,18 @@ const SAFE_DESCRIPTION = "分享生活与技术的互联网角落";
                           </Link>
                         </h2>
                         
-                        {/* 🔥 标签终极修复：同时传入三个参数，总有一个是对的！ */}
+                        {/* 🔥 暴力直出标签！不依赖任何组件！ */}
+                        {/* 直接用 HTML 的 a 标签渲染，只要有数据，绝对能显示！ */}
                         <div class="flex flex-wrap mt-2 mb-4">
                           {tags && tags.map((tag) => {
-                             // 处理 tag 是对象还是字符串的情况
                              const tagName = tag.id || tag; 
                              return (
-                               <Tag text={tagName} id={tagName} name={tagName} />
+                               <a 
+                                 href={`/tags/${tagName}`} 
+                                 class="mr-3 text-sm font-medium uppercase text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                               >
+                                 {tagName}
+                               </a>
                              )
                           })}
                         </div>
